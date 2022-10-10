@@ -1,10 +1,10 @@
 # cron-comparison
 
-Test/benchmark of all javascript cron implementations
+Tests and benchmark of all javascript cron implementations
 
 ## Running
 
-Run tets and show output in console
+Run tests and show output in console
 
 `npm run test`
 
