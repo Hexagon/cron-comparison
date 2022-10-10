@@ -20,8 +20,8 @@ console.log("Tests performed at " + new Date().toISOString());
 for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0 29 2 1", "0 0 0 29 2 *"]) {
 
     console.log("");
-    console.log("### Testing next invocation of pattern '" + pattern + "'");
-    
+    console.log("#### Testing next invocation of pattern '" + pattern + "'");
+    console.log("```");
     let successful = [];
 
     for (const scheduler of [Croner, /*CronerDev,*/ NodeCron, NodeSchedule, CronosJS, Cron]) {
@@ -40,9 +40,10 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
         console.log(result);
 
     }
-
+    console.log("```");
     console.log("");
-    console.log("#### Benchmark using pattern '" + pattern + "'");
+    console.log("##### Benchmark using pattern '" + pattern + "'");
+    console.log("```");
     
     var bm = new Benchmark.Suite;
 
@@ -73,6 +74,8 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
         console.log("Fastest is **" + this.filter('fastest').map('name') + "**");
       })  
       .run({ 'async' : false });
+
+    console.log("```");
 }
 
 console.log("");
