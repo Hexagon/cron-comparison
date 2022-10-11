@@ -16,41 +16,67 @@ import Croner from "./interfaces/croner.js";
 import CronosJS from "./interfaces/cronosjs.js";
 
 console.log("Tests performed at " + new Date().toISOString());
+const summary = {};
 
-for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0 29 2 1", "0 0 0 29 2 *"]) {
+for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0 29 2 1", "0 0 0 29 2 *","15 15 */3 * * *","15 15 */3 */10 10 *","15 15 */3 * 10 SUN,MON,TUE"]) {
 
     console.log("");
     console.log("#### Pattern '" + pattern + "'");
     console.log("```");
     console.log("Tests");
     console.log("");
-    let successful = [];
 
-    for (const scheduler of [Croner, /*CronerDev,*/ NodeCron, NodeSchedule, CronosJS, Cron]) {
-    //for (const scheduler of [Croner, CronerDev]) {
+    let reports = [];
+
+    for (const scheduler of [Croner, NodeCron, NodeSchedule, CronosJS, Cron]) {
         let 
             job = scheduler(pattern),
-            result;
+            result = { id: job.id, scheduler };
         try {
             job.init();
-            result = job.id.padEnd(15," ") + " - Success - " + new Date(job.next()).toLocaleString();
-            successful.push(scheduler);
+            result.result = new Date(job.next()).toLocaleString();
+            job.stop();
         } catch (e) {
-            result = job.id.padEnd(15," ") + " - Failure - " + e.toString();
+            result.result = undefined;
+            result.message = e.toString();
         }
-        job.stop();
-        console.log(result);
-
+        reports.push(result);
     }
+
+    // Guess correct answer from popular demand
+    let correct = {},
+        bestCount = 0,
+        best;
+    for(const report of reports) {
+      if (report.result) {
+        correct[report.result] = correct[report.result] ? correct[report.result]++ : 1;
+        if (correct[report.result] > bestCount) {
+          bestCount = correct[report.result];
+          best = report.result;
+        }
+      }
+    }
+
+    // Print test results
+    for(const report of reports) {
+      report.correct = report?.result == best;
+      console.log(report.id.padEnd(15, " ") + " - " + (report.correct ? "OK   " : "FAIL ") + " - " + (report.correct ? report.result : (report.result || report.message)));
+      summary[report.id] = summary[report.id] || {};
+      summary[report.id].ok = (summary[report.id].ok || 0) + (report.correct ?  1 : 0);
+      summary[report.id].fail = (summary[report.id].fail || 0) + (!report.correct ? 1 : 0);
+    }
+
     console.log("");
-    console.log("Benchmark");
+    console.log("Benchmark (only OK)");
     console.log("");
 
     var bm = new Benchmark.Suite;
 
-    for (const scheduler of successful) {
-        const job = scheduler(pattern);
-        bm.add(job.id.padEnd(" ",15), function() { job.init(); job.stop(); });
+    for (const report of reports) {
+      if( report.correct ) {
+        const job = report.scheduler(pattern);
+        bm.add(job.id.padEnd(15, " "), function() { job.init(); job.stop(); });
+      } 
     }
     
     bm
@@ -66,4 +92,12 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
     console.log("```");
 }
 
+console.log("");
+console.log("### Test summary");
+console.log("");
+console.log("| Library | OK | FAIL | % OK |");
+console.log("|:......:|:--:|:---:|:-----:|");
+for(const report in summary) {
+  console.log("| " + report + " | " + summary[report].ok + " | " + summary[report].fail + " | " + (summary[report].ok / Math.round((summary[report].ok + summary[report].fail))*100) + "% |" );
+}
 console.log("");
