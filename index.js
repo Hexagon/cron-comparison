@@ -96,7 +96,7 @@ console.log("");
 console.log("### Test summary");
 console.log("");
 console.log("| Library | OK | FAIL | % OK |");
-console.log("|:......:|:--:|:---:|:-----:|");
+console.log("| :---: | :--: | :---: | :-----: |");
 for(const report in summary) {
   console.log("| " + report + " | " + summary[report].ok + " | " + summary[report].fail + " | " + (summary[report].ok / Math.round((summary[report].ok + summary[report].fail))*100) + "% |" );
 }
