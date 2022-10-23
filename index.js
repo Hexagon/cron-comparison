@@ -12,8 +12,8 @@ const NodeCron = require("./interfaces/nodecron.cjs");
 
 // ES modules
 import Croner from "./interfaces/croner.js";
-//import CronerDev from "./interfaces/cronerdev.js";
 import CronosJS from "./interfaces/cronosjs.js";
+import CronSchedule from "./interfaces/cronschedule.js";
 
 console.log("Tests performed at " + new Date().toISOString());
 const summary = {};
@@ -28,9 +28,9 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
 
     let reports = [];
 
-    for (const scheduler of [Croner, NodeCron, NodeSchedule, CronosJS, Cron]) {
+    for (const scheduler of [Croner, NodeCron, CronSchedule, NodeSchedule, CronosJS, Cron]) {
         let 
-            job = scheduler(pattern),
+            job = new scheduler(pattern),
             result = { id: job.id, scheduler };
         try {
             job.init();
@@ -74,8 +74,8 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
 
     for (const report of reports) {
       if( report.correct ) {
-        const job = report.scheduler(pattern);
-        bm.add(job.id.padEnd(15, " "), function() { job.init(); job.stop(); });
+        const job = new report.scheduler(pattern);
+        bm.add(job.id.padEnd(15, " "), function() { job.init(pattern); job.next(); job.stop(); });
       } 
     }
     
@@ -93,7 +93,7 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
 }
 
 console.log("");
-console.log("### Test summary");
+console.log("## Test summary");
 console.log("");
 console.log("| Library | OK | FAIL | % OK |");
 console.log("| :---: | :--: | :---: | :-----: |");
