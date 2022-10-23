@@ -173,7 +173,7 @@ cronosjs        x 43,398 ops/sec ±0.42% (90 runs sampled)
 Fastest is croner         
 ```
 
-### Test summary
+## Test summary
 
 | Library | OK | FAIL | % OK |
 | :---: | :--: | :---: | :-----: |
