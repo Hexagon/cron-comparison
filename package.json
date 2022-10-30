@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
-    "update-readme": "copy README.template README.md && npm run test >> README.md"
+    "update-readme": "(cp README.template README.md || copy README.template README.md) && npm run test >> README.md"
   },
   "author": "",
   "license": "MIT",
