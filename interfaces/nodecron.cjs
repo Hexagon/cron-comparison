@@ -3,7 +3,6 @@ const cron = require("node-cron");
 function CronInterface(pattern, options, fn) {
     let job;
     return {
-        id: "node-cron",
         init: () => {job = new cron.schedule(pattern, fn ?? (() => { }), { scheduled: true }); },
         next: () => { return null; },
         enumerate: (n) => {},
@@ -11,4 +10,8 @@ function CronInterface(pattern, options, fn) {
     };
 }
 
-module.exports = CronInterface;
+module.exports = {
+    id: "node-cron",
+    url: "https://github.com/node-cron/node-cron",
+    interface: CronInterface
+};

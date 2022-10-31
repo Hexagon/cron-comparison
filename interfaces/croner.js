@@ -3,7 +3,6 @@ import { Cron } from "croner";
 function CronInterface(pattern, options, fn) {
     let job;
     return {
-        id: "croner",
         init: () => job = new Cron(pattern, options),
         next: () => job.next(),
         enumerate: () => job.enumerate(),
@@ -11,4 +10,8 @@ function CronInterface(pattern, options, fn) {
     };
 }
 
-export default CronInterface;
+export default {
+    id: "croner",
+    url: "https://github.com/hexagon/croner",
+    interface: CronInterface
+}

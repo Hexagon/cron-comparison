@@ -14,8 +14,15 @@ const NodeCron = require("./interfaces/nodecron.cjs");
 import Croner from "./interfaces/croner.js";
 import CronosJS from "./interfaces/cronosjs.js";
 
-console.log("Tests performed at " + new Date().toISOString());
-const summary = {};
+console.log("Tests performed at " + new Date().toISOString() + "\n");
+const 
+  summary = {},
+  subjects = [Croner, NodeCron, NodeSchedule, CronosJS, Cron];
+
+console.log("Tested libraries:\n");
+for (const scheduler of subjects) {
+  console.log(`*   [${scheduler.id}](${scheduler.url})`);
+}
 
 for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0 29 2 1", "0 0 0 29 2 *","15 15 */3 * * *","15 15 */3 */10 10 *","15 15 */3 * 10 SUN,MON,TUE"]) {
 
@@ -27,10 +34,10 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
 
     let reports = [];
 
-    for (const scheduler of [Croner, NodeCron, NodeSchedule, CronosJS, Cron]) {
+    for (const scheduler of subjects) {
         let 
-            job = new scheduler(pattern),
-            result = { id: job.id, scheduler };
+            job = new scheduler.interface(pattern),
+            result = { id: scheduler.id, scheduler: scheduler.interface };
         try {
             job.init();
             result.result = new Date(job.next()).toLocaleString();
@@ -74,7 +81,7 @@ for (const pattern of ["0 0 0 L 2 *", "1 2 3 4 5 6", "*/3 */3 */3 * * *", "0 0 0
     for (const report of reports) {
       if( report.correct ) {
         const job = new report.scheduler(pattern);
-        bm.add(job.id.padEnd(15, " "), function() { job.init(pattern); job.next(); job.stop(); });
+        bm.add(report.id.padEnd(15, " "), function() { job.init(pattern); job.next(); job.stop(); });
       } 
     }
     
