@@ -19,7 +19,9 @@ for (const scheduler of schedulers) {
 
 for (const pattern of [
   "0 0 0 L 2 *",
-  "0 0 0 * 2 5,6#L",
+  "0 0 0 * 2 5#L",
+  "0 0 0 * 12 5#2",
+  "0 0 0 L 12 5-6#3",
   "1 2 3 4 5 6",
   "*/3 */3 */3 * * *",
   "0 0 0 29 2 1",

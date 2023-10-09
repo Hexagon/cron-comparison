@@ -91,3 +91,7 @@
 ### 💎 Styles
 
 - setup prettier ([f02b5cc](https://github.com/sheerlox/cron-comparison/commit/f02b5cc4de17255373d7e1aae5ae8196dc376862))
+
+## [1.0.2](https://github.com/hexagon/cron-comparison/compare/de2f047...57132f7) (2023-10-09)
+
+### Initial work
