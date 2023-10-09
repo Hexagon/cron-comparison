@@ -4,8 +4,8 @@ function CronInterface(pattern, options, fn) {
     let job;
     return {
         init: () => job = new Cron(pattern, options),
-        next: () => job.next(),
-        enumerate: () => job.enumerate(),
+        next: () => job.nextRun(),
+        enumerate: (n) => job.nextRuns(n),
         stop: () => {}
     };
 }
