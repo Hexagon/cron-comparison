@@ -188,11 +188,10 @@ Fastest is croner
 
 ## Test summary
 
-| Library | OK | FAIL | % OK |
-| :---: | :--: | :---: | :-----: |
-| croner | 8 | 0 | 100% |
-| node-cron | 0 | 8 | 0% |
-| node-schedule | 8 | 0 | 100% |
-| cronosjs | 8 | 0 | 100% |
-| cron | 7 | 1 | 87.5% |
-
+|    Library    | OK  | FAIL | % OK  |
+| :-----------: | :-: | :--: | :---: |
+|     cron      |  7  |  1   | 87.5% |
+|    croner     |  8  |  0   | 100%  |
+|   cronosjs    |  8  |  0   | 100%  |
+|   node-cron   |  0  |  8   |  0%   |
+| node-schedule |  8  |  0   | 100%  |
